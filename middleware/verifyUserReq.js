@@ -1,5 +1,6 @@
 const randomToken = require('rand-token')
 const userServices = require('../services/userServices')
+const {client} = require('../configration/redisConfigration')
 const {hash_password, compare_password } = require('../utility/helper')
 
 
@@ -10,11 +11,9 @@ const registerReqValidator = async(req, res, next) => {
   
   if(!userServices.matchPassword(req.body.password, req.body.confirmPassword))
        return res.status(401).send({message:"password mismatch"});
-  console.log(req.body.password)
-  const hashed_pass =  await hash_password(req.body.password);
-  console.log(hashed_pass);
-  req.body.password = hashed_pass;
-  next();
+       const hashed_pass =  await hash_password(req.body.password);
+       req.body.password = hashed_pass;
+       next();
 }
 
 const loginRegValidator = async(req, res, next) => {
@@ -29,8 +28,14 @@ const loginRegValidator = async(req, res, next) => {
 
    const genrated_token = userServices.generateToken({email:req.body.email, userName:existingUser.userName})
    const refreshToken = randomToken.uid(256);
-   refreshTokens = {...refreshTokens, [refreshToken]:{email:req.body.email, userName:existingUser.userName}}
-   req.refresh_token = refreshToken;
+        await client.hSet(refreshToken, {
+          email:req.body.email,
+          userName:existingUser.userName
+         })
+   res.cookie('refreshToken', refreshToken, {
+       httpOnly:true,
+       secure: true
+      });
    req.token=  genrated_token;
    req.user=existingUser; 
       

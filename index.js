@@ -1,5 +1,6 @@
 const express = require('express')
 const userRoutes = require('./routes/userRoutes')
+const {redisConnection}= require('./configration/redisConfigration');
 //import db_connection from './utility/db_configration.js';
 //import { port } from './configration/config.js';
 //import userRoutes from './routes/userRoutes.js';
@@ -17,6 +18,7 @@ app.listen(6006, ()=> console.log("server is running on port 6006"))
 
 //database connection
 //db_connection();
+redisConnection();
 
 //all routes
 app.use('/user', userRoutes);

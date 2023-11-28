@@ -7,7 +7,7 @@ env.config()
 const secretKey = process.env.SECRET_KEY || "dfuhfew76436437^$VU%V^$djd" ;
 
 module.exports = {
-    fetchUser : async(field) => await User.findOne({include:userAddress},{where:field}),
+    fetchUser : async(field) => await User.findOne({where:field}),
     matchPassword :(password, confirmPassword)=> password===confirmPassword,
 
     registerUser : async(body_data) =>{
