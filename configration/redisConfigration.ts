@@ -6,7 +6,8 @@ const redisConnection = async() => {
     try {
         await client.connect();
         console.log('redis server connected succesfully')
-    } catch (error) {
+    } catch (error:any)
+     {
         console.log('error occured in redis' , error.message)
     }
 }

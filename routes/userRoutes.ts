@@ -1,5 +1,5 @@
 const express = require('express')
-const controllers = require('../controllers/userController')
+const controllers = require('../controllers/userController.ts')
 const {registerReqValidator, loginRegValidator} = require("../middleware/verifyUserReq")
 const verifyUser = require("../middleware/verifyUser")
 const upload = require('../configration/multerConfigration')
