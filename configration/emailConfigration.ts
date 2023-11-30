@@ -5,12 +5,20 @@ const {google} = require('googleapis')
 
 env.config();
 
+interface mail_data {
+  to:string,
+  link:string,
+  message:string,
+  subject:string,
+  url:string
+}
+
 const OAuth2 = google.auth.OAuth2;
 const OAuth2_client = new OAuth2(process.env.G_CLIENT_ID, process.env.G_CLIENT_SECRET)
 OAuth2_client.setCredentials({refresh_token:process.env.G_REFRESH_TOKEN})
 
-module.exports = (data) => {
-  const access_token = OAuth2_client.getAccessToken();
+module.exports = (data:mail_data) => {
+  const access_token:string = OAuth2_client.getAccessToken();
 
   const transport = nodemailer.createTransport({
     service:'gmail',
@@ -34,7 +42,7 @@ module.exports = (data) => {
           <a href=${data.url}>${data.link}</a>`,
   }
 
-  transport.sendMail(mail_options , (err, result)=>{
+  transport.sendMail(mail_options , (err:any, result:any)=>{
     if(err) console.log(err)
     else console.log(result)
 
